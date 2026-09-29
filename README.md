@@ -22,15 +22,15 @@ Fall 2026
 
 ## Proposed Projects
 
-### Proposal 1: TBD
+### Proposal 1: E2E Encrypted Collaborative Notes Application
 
-**Name:** TBD
+**Name:** E2E Encrypted Collaborative Notes Application
 
-**Problem:** TBD
+**Problem:** Existing collaborative note-taking tools generally require users to trust the service provider with access to their readable data. Teams also need ways to collaborate, synchronize changes, recover previous versions, and experiment with changes without losing work.
 
-**Target users:** TBD
+**Target users:** Individuals and groups who want to create, organize, and collaboratively edit notes while keeping their readable content private from the hosting server or service provider.
 
-**Proposed solution:** TBD
+**Proposed solution:** A collaborative note-taking application where all readable note data is encrypted and decrypted exclusively on client devices. The server stores and synchronizes encrypted data only. Users can maintain private notes or share notes with groups. The application will provide version history and lightweight git-like operations such as branching, merging, pull, push, and retrieval of previous versions. Real-time simultaneous collaboration would be nice as well.
 
 **Technology stack:** TBD.
 
