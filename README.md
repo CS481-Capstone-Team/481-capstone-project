@@ -36,17 +36,19 @@ Fall 2026
 
 ---
 
-### Proposal 2: TBD
+### Proposal 2: Infinitely Divisible Work Tree
 
-**Name:** TBD
+**Name:** Infinitely Divisible Work Tree (working title)
 
-**Problem:** TBD
+**Problem:** Most work tracking tools use fixed levels, such as epic, story, task, and subtask. Work that does not fit those levels has to be forced into them. Progress at higher levels is usually entered by hand, so it can differ from the work beneath it. Access is typically set for a whole project, not for individual pieces of work. This product uses a single type of item that can be split without limit, calculates progress from the pieces beneath it, and sets access on each piece.
 
-**Target users:** TBD
+**Target users:** Large organizations with thousands of employees across many departments, such as engineering, operations, legal, and HR. This includes executives who want to see company-wide progress, managers who hand out work and track their own part, and individual employees who only need to see their own slice.
 
-**Proposed solution:** TBD
+**Proposed solution:** A work tracker built on the idea that any piece of work can be split into smaller pieces of work, as many times as needed. A piece's level is just how deep it sits in the tree. Each workspace holds one tree with a single top item, and workspaces are separate from each other unless someone links them. The smallest pieces, the ones with nothing under them (leaf nodes), have a status that people set by hand, such as not started, in progress, completed, or postponed. Every larger piece works out its progress automatically from the pieces beneath it, so the numbers are always correct at every level (with manual sign-off for every node computed complete). Whoever owns a piece can split it and give the smaller pieces to people or teams. They can also allow those people to split and hand out work further, so responsibility passes down as deep as the tree goes. No one can give away a right they don't have. Access is set for each workspace, each piece, and each person or team, so someone can be limited to their own piece and what is under it. The work can be shown as a tree with progress at each level, or as a filterable list, with other views such as a board, a timeline, or a workload per person.
 
 **Technology stack:** TBD.
+
+
 
 ---
 
