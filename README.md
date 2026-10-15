@@ -36,7 +36,19 @@ Fall 2026
 
 ---
 
-### Proposal 2: Infinitely Divisible Work Tree
+### Proposal 2: Parking Lot Availability System
+
+**Name:** TBD
+
+**Problem:** Parking operators lack reliable, real-time information about available parking spaces, making it difficult to manage capacity, reduce congestion, and improve parking efficiency.
+
+**Target users:** Parking lot operators, universities, hospitals, airports, municipalities, and large commercial facilities.
+
+**Proposed solution:** An affordable, sensor-based parking monitoring system that tracks parking availability in real time. Operators can view occupancy remotely through a web dashboard and integrate the data into their own systems through an API.
+
+---
+
+### Proposal 3: Infinitely Divisible Work Tree
 
 **Name:** Infinitely Divisible Work Tree (working title)
 
@@ -48,26 +60,10 @@ Fall 2026
 
 **Technology stack:** TBD.
 
+## Related Repositories
 
+Parking Lot Availability System (Proposal 2):
 
----
-
-### Proposal 3: TBD
-
-**Name:** TBD
-
-**Problem:** TBD
-
-**Target users:** TBD
-
-**Proposed solution:** TBD
-
-**Technology stack:** TBD.
-
-## Repository Structure
-
-The repository structure will be defined once the project and technology stack are selected.
-
-## Getting Started
-
-Setup and development instructions will be added once the project environment is established.
+- [parking-server](https://github.com/CS481-Capstone-Team/parking-server) - Backend API for managing parking occupancy data and availability.
+- [parking-webapp](https://github.com/CS481-Capstone-Team/parking-webapp) - Web application for viewing real-time parking availability.
+- [parking-sensor](https://github.com/CS481-Capstone-Team/parking-sensor) - Sensor firmware for detecting and reporting parking spot occupancy.
