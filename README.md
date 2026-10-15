@@ -5,7 +5,6 @@ Repository for our CS 481 Capstone project.
 ## Team
 
 - Guilherme Colombo
-- Shahina Aqdodova
 - Monica Kissimina
 - Zachary Chow
 
