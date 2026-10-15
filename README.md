@@ -11,9 +11,7 @@ Repository for our CS 481 Capstone project.
 
 ## Project Status
 
-Project idea and scope are still being determined.
-
-Repo is being set up early so the team can establish development workflow, issue tracking, and source control practices.
+Selected project: Proposal 2, Parking Lot Availability System. Scope and tech stack still being defined.
 
 ## Course
 
