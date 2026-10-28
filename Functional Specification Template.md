@@ -2,7 +2,7 @@
 
 **Project:** Vehicle Lane Counter System  
 **Status:** Draft  
-**Team:** International Committee  
+**Team:** The international Capstoners   
 **Authors:** Guilherme, Zachary, Monica  
 
 ## Version History
@@ -30,9 +30,15 @@ Define the system or feature boundary.
 - Offline behavior: sensors keep counting while offline and their counts appear after reconnecting.
 - Alerts for system events and Host-defined thresholds.
 - MVP: 1 account, 2 sensors, working as expected through a simulated downtime with counts reconciling on reconnect.
+- A parking lot map will be displayed in the web app.
+- Parking recommendation for Guest entering establishments having more than one Parking lot. 
 
 **Out of scope**
 - How people inside a company share an account (out of MVP scope).
+- Determine each lot occupancy
+- Enforcement of capacity, and any gate control, payment, reservation, or ticketing function.
+- turn on and off the sensors remotely. 
+   
 
 ### 1.3 Intended Audience
 Identify who should read this document and why.
@@ -144,7 +150,7 @@ Include relevant budgets, schedules, external dependencies, regulations, or assu
 
 - MVP supports 1 account and 2 sensors.
 - MVP must work as expected through a simulated downtime, with counts reconciling on reconnect.
-- The user installs the sensor and provides WiFi.
+- The host installs the sensor and provides WiFi.
 - Vehicle type accuracy depends on sensor precision.
 
 ### 2.7 Design and Implementation Constraints
@@ -169,7 +175,7 @@ Describe screens, navigation, CLI interactions, or other user-facing interfaces.
 - **Sensor management:** label, rename, reconfigure, or remove sensors.
 - **Pool management:** add in and out sensors, set capacity, rename, reconfigure, reset count, or remove pools.
 - **Historical data:** time window queries, breakdowns by vehicle type, direction, and speed, per-vehicle event history, export.
-- **Guest view:** find an establishment and view its shared data. Simple and non-technical.
+- **Guest dashboard:**  and view its shared data. Simple and non-technical.
 - **Alerts:** set up threshold alerts and see system alerts.
 - Times are shown in a user-defined time zone.
 
