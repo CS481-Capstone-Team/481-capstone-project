@@ -35,9 +35,10 @@ Define the system or feature boundary.
 
 **Out of scope**
 - How people inside a company share an account (out of MVP scope).
-- Determine each lot occupancy
+- Determine each parking spots occupancy
 - Enforcement of capacity, and any gate control, payment, reservation, or ticketing function.
-- turn on and off the sensors remotely. 
+- turn on and off the sensors remotely.
+ 
    
 
 ### 1.3 Intended Audience
