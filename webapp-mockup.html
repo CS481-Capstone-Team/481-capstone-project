@@ -21,6 +21,7 @@
   .row { display: flex; gap: 48px; align-items: flex-start; }
   .item { display: flex; flex-direction: column; gap: 8px; }
   .item-label { font-size: 12px; color: #666; }
+  .item.spacer { width: 400px; }
 
   /* Screen frames */
   .frame {
@@ -68,6 +69,87 @@
   .roles .btn strong { display: block; font-size: 15px; }
   .roles .btn span { font-size: 13px; color: #666; }
   .roles .btn.selected { border-color: #2563eb; box-shadow: 0 0 0 1px #2563eb; }
+
+  /* Host dashboard */
+  .host { height: 100%; display: flex; flex-direction: column; }
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 1px solid #eee;
+  }
+  .topbar-brand { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+  .logo-sm { width: 22px; height: 22px; border-radius: 6px; background: #2563eb; }
+  .avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #e8eefc; color: #2563eb;
+    display: grid; place-items: center;
+    font-size: 13px; font-weight: 600;
+  }
+  .host-main { flex: 1; overflow: hidden; padding: 14px 20px; display: flex; flex-direction: column; gap: 16px; }
+  .alert-banner {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: #fdecec;
+    font-size: 13px;
+  }
+  .section-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .section-head h2 { font-size: 15px; }
+  .link { font-size: 13px; color: #2563eb; }
+
+  .pool { padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
+  .pool:last-child { border-bottom: none; }
+  .pool-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .pool-name { font-weight: 600; font-size: 14px; }
+  .pool-count { font-size: 13px; color: #444; }
+  .pool-meta { font-size: 12px; color: #777; margin-top: 4px; }
+  .bar { height: 6px; border-radius: 3px; background: #eee; overflow: hidden; }
+  .bar-fill { height: 100%; background: #2563eb; }
+  .bar-fill.full { background: #dc2626; }
+  .bar-fill.warn { background: #d97706; }
+  .warn-text { color: #b45309; }
+  .badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+  .badge.full { background: #fdecec; color: #dc2626; }
+
+  .sensor { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid #f0f0f0; }
+  .sensor:last-child { border-bottom: none; }
+  .sensor-info { flex: 1; display: flex; flex-direction: column; }
+  .sensor-name { font-size: 14px; font-family: ui-monospace, Consolas, monospace; }
+  .sensor-meta { font-size: 12px; color: #777; }
+  .sensor-stat { font-size: 15px; font-weight: 600; text-align: right; display: flex; flex-direction: column; }
+  .sensor-stat small { font-size: 11px; font-weight: 400; color: #999; }
+
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot.green { background: #16a34a; }
+  .dot.yellow { background: #eab308; }
+  .dot.amber { background: #d97706; }
+  .dot.red { background: #dc2626; }
+
+  .tabbar {
+    display: flex; justify-content: space-around;
+    padding: 12px 8px;
+    border-top: 1px solid #eee;
+    font-size: 12px; color: #888;
+  }
+  .tab.active { color: #2563eb; font-weight: 600; }
+
+  /* Guest view */
+  .guest { height: 100%; display: flex; flex-direction: column; }
+  .guest-head { display: flex; align-items: center; gap: 12px; padding: 16px 20px; }
+  .back { font-size: 28px; line-height: 1; color: #888; }
+  .guest-sub { font-size: 12px; color: #777; }
+  .guest-head h2 { font-size: 20px; }
+  .map { width: 100%; height: 300px; display: block; }
+  .lots { padding: 8px 20px; }
+  .lot { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+  .lot:last-child { border-bottom: none; }
+  .lot .dot { width: 12px; height: 12px; }
+  .lot-info { flex: 1; display: flex; flex-direction: column; }
+  .lot-name { font-size: 15px; font-weight: 600; }
+  .lot-meta { font-size: 12px; color: #777; }
+  .lot-free { font-size: 18px; font-weight: 700; text-align: right; display: flex; flex-direction: column; }
+  .lot-free small { font-size: 11px; font-weight: 400; color: #999; }
+  .full-text { color: #dc2626; }
 </style>
 </head>
 <body>
@@ -97,6 +179,194 @@
             </button>
           </div>
           <button class="btn primary">Continue</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 0, Item 1: Host view -->
+    <div class="item">
+      <div class="item-label">0.1 Host view</div>
+      <div class="frame portrait">
+        <div class="host">
+          <header class="topbar">
+            <div class="topbar-brand"><div class="logo-sm"></div>LaneCount</div>
+            <div class="avatar">H</div>
+          </header>
+
+          <main class="host-main">
+            <div class="alert-banner">
+              <span class="dot red"></span>
+              <span><strong>lot-c-exit</strong> offline since 2:14 PM</span>
+            </div>
+
+            <section>
+              <div class="section-head"><h2>Pools</h2><span class="link">+ New</span></div>
+              <div class="pool">
+                <div class="pool-top">
+                  <span class="pool-name">Lot A</span>
+                  <span class="pool-count">58 / 200 free</span>
+                </div>
+                <div class="bar"><div class="bar-fill" style="width:71%"></div></div>
+                <div class="pool-meta">71% full</div>
+              </div>
+              <div class="pool">
+                <div class="pool-top">
+                  <span class="pool-name">Lot B</span>
+                  <span class="badge full">Full</span>
+                </div>
+                <div class="bar"><div class="bar-fill full" style="width:100%"></div></div>
+                <div class="pool-meta">0 / 80 free · 100% full</div>
+              </div>
+              <div class="pool">
+                <div class="pool-top">
+                  <span class="pool-name">Lot C</span>
+                  <span class="pool-count">31 / 120 free</span>
+                </div>
+                <div class="bar"><div class="bar-fill warn" style="width:74%"></div></div>
+                <div class="pool-meta warn-text">⚠ Possibly inaccurate, sensor offline</div>
+              </div>
+            </section>
+
+            <section>
+              <div class="section-head"><h2>Sensors</h2><span class="link">Manage</span></div>
+              <div class="sensor">
+                <span class="dot green"></span>
+                <div class="sensor-info">
+                  <span class="sensor-name">lot-a-entrance</span>
+                  <span class="sensor-meta">In · Lot A · last vehicle 12s ago</span>
+                </div>
+                <span class="sensor-stat">412<small>today</small></span>
+              </div>
+              <div class="sensor">
+                <span class="dot amber"></span>
+                <div class="sensor-info">
+                  <span class="sensor-name">lane7</span>
+                  <span class="sensor-meta">Low battery · last vehicle 1m ago</span>
+                </div>
+                <span class="sensor-stat">1,208<small>today</small></span>
+              </div>
+              <div class="sensor">
+                <span class="dot red"></span>
+                <div class="sensor-info">
+                  <span class="sensor-name">lot-c-exit</span>
+                  <span class="sensor-meta">Out · Lot C · offline 38m</span>
+                </div>
+                <span class="sensor-stat">97<small>today</small></span>
+              </div>
+            </section>
+          </main>
+
+          <nav class="tabbar">
+            <span class="tab active">Dashboard</span>
+            <span class="tab">Map</span>
+            <span class="tab">History</span>
+            <span class="tab">Alerts</span>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Row 1 -->
+  <div class="row">
+
+    <!-- Row 1, Item 0: empty (aligns guest flow under host flow) -->
+    <div class="item spacer"></div>
+
+    <!-- Row 1, Item 1: Guest view -->
+    <div class="item">
+      <div class="item-label">1.1 Guest view</div>
+      <div class="frame portrait">
+        <div class="guest">
+          <header class="guest-head">
+            <span class="back">‹</span>
+            <div>
+              <div class="guest-sub">Parking at</div>
+              <h2>Bellevue Mall</h2>
+            </div>
+          </header>
+
+          <svg class="map" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+            <!-- City blocks (background), roads drawn on top -->
+            <rect width="400" height="300" fill="#e6e3dc"/>
+            <!-- Parks -->
+            <rect x="0" y="108" width="57" height="44" fill="#d3e5c8"/>
+            <rect x="343" y="203" width="57" height="44" fill="#d3e5c8"/>
+            <!-- Minor roads -->
+            <g stroke="#fff" stroke-width="6">
+              <line x1="25" y1="0" x2="25" y2="300"/>
+              <line x1="110" y1="0" x2="110" y2="300"/>
+              <line x1="375" y1="0" x2="375" y2="300"/>
+              <line x1="0" y1="105" x2="110" y2="105"/><line x1="340" y1="105" x2="400" y2="105"/>
+              <line x1="0" y1="155" x2="110" y2="155"/><line x1="340" y1="155" x2="400" y2="155"/>
+              <line x1="0" y1="200" x2="110" y2="200"/><line x1="340" y1="200" x2="400" y2="200"/>
+              <line x1="0" y1="280" x2="400" y2="280"/>
+            </g>
+            <!-- Main roads -->
+            <g stroke="#fff">
+              <line x1="0" y1="60" x2="400" y2="60" stroke-width="14"/>
+              <line x1="0" y1="250" x2="400" y2="250" stroke-width="14"/>
+              <line x1="60" y1="0" x2="60" y2="300" stroke-width="14"/>
+              <line x1="340" y1="0" x2="340" y2="300" stroke-width="12"/>
+            </g>
+            <!-- Street names -->
+            <g font-size="7" fill="#9a958a">
+              <text x="245" y="62.5">NE 8th St</text>
+              <text x="245" y="252.5">NE 4th St</text>
+              <text x="62.5" y="140" transform="rotate(90 62.5 140)">Bellevue Way</text>
+            </g>
+            <!-- Mall property -->
+            <rect x="117" y="67" width="216" height="176" fill="#efedf5"/>
+            <rect x="130" y="100" width="150" height="100" rx="6" fill="#d9d6e8"/>
+            <text x="205" y="155" text-anchor="middle" font-size="12" fill="#5b5675" font-weight="600">Bellevue Mall</text>
+            <!-- Lots -->
+            <rect x="140" y="12" width="130" height="38" rx="4" fill="#cfd4dc"/>
+            <rect x="290" y="105" width="40" height="90" rx="4" fill="#cfd4dc"/>
+            <rect x="140" y="210" width="130" height="30" rx="4" fill="#cfd4dc"/>
+            <!-- Route: user to North Lot -->
+            <polyline points="40,280 60,280 60,60 205,60 205,48" fill="none" stroke="#fff" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>
+            <polyline points="40,280 60,280 60,60 205,60 205,48" fill="none" stroke="#2563eb" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+            <!-- User location -->
+            <circle cx="40" cy="280" r="12" fill="#2563eb" opacity="0.2"/>
+            <circle cx="40" cy="280" r="5.5" fill="#2563eb" stroke="#fff" stroke-width="2"/>
+            <!-- Pins -->
+            <g font-size="11" font-weight="700" text-anchor="middle" fill="#fff">
+              <circle cx="205" cy="31" r="15" fill="#eab308"/><text x="205" y="35">P</text>
+              <circle cx="310" cy="150" r="15" fill="#d97706"/><text x="310" y="154">P</text>
+              <circle cx="205" cy="225" r="15" fill="#dc2626"/><text x="205" y="229">P</text>
+            </g>
+            <!-- Route chip -->
+            <rect x="248" y="268" width="144" height="24" rx="12" fill="#fff" stroke="#e0e0e0"/>
+            <text x="320" y="284" text-anchor="middle" font-size="11" fill="#1a1a1a"><tspan font-weight="700" fill="#2563eb">4 min</tspan> to North Lot</text>
+          </svg>
+
+          <div class="lots">
+            <div class="lot">
+              <span class="dot yellow"></span>
+              <div class="lot-info">
+                <span class="lot-name">North Lot</span>
+                <span class="lot-meta">Some space · 4 min away</span>
+              </div>
+              <span class="lot-free">64<small>free</small></span>
+            </div>
+            <div class="lot">
+              <span class="dot amber"></span>
+              <div class="lot-info">
+                <span class="lot-name">East Garage</span>
+                <span class="lot-meta">Almost full</span>
+              </div>
+              <span class="lot-free">6<small>free</small></span>
+            </div>
+            <div class="lot">
+              <span class="dot red"></span>
+              <div class="lot-info">
+                <span class="lot-name">South Lot</span>
+                <span class="lot-meta">Full</span>
+              </div>
+              <span class="lot-free full-text">0<small>free</small></span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
