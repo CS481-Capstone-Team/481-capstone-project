@@ -27,7 +27,9 @@ Define the system or feature boundary.
 - Alerts for system events and Host-defined thresholds.
 - MVP: 1 account, 2 sensors, working as expected through a simulated downtime with counts reconciling on reconnect.
 - A parking lot map will be displayed in the web app.
-- Parking recommendation for Guest entering establishments having more than one Parking lot. 
+- Parking recommendation for Guest entering establishments having more than one Parking lot.
+- Host knows when a sensor goes down
+- Host can wirelessly disregard a sensor
 
 **Out of scope**
 - How people inside a company share an account (out of MVP scope).
