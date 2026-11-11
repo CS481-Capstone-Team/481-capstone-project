@@ -74,7 +74,7 @@ List supporting documents, such as project requirements, designs, mockups, polic
 
 | Document | Version / Date | Notes |
 | --- | --- | --- |
-| <Document name or link> | <Version or date> | <Notes> |
+| [Mockup](webapp-mockup.html) | 2026-11-02 | N/A |
 
 ### 1.6 Document Conventions
 Use consistent language and requirement IDs. Suggested conventions:
