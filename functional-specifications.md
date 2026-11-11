@@ -5,10 +5,6 @@
 **Team:** The international Capstoners   
 **Authors:** Guilherme, Zachary, Monica  
 
-## Version History
-
-Version history ommitted as it will be tracked entirely by GitHub.
-
 ## 1. Introduction
 
 ### 1.1 Purpose
@@ -31,7 +27,9 @@ Define the system or feature boundary.
 - Alerts for system events and Host-defined thresholds.
 - MVP: 1 account, 2 sensors, working as expected through a simulated downtime with counts reconciling on reconnect.
 - A parking lot map will be displayed in the web app.
-- Parking recommendation for Guest entering establishments having more than one Parking lot. 
+- Parking recommendation for Guest entering establishments having more than one Parking lot.
+- Host knows when a sensor goes down
+- Host can wirelessly disregard a sensor
 
 **Out of scope**
 - How people inside a company share an account (out of MVP scope).
@@ -46,11 +44,11 @@ Identify who should read this document and why.
 
 | Audience | Why they need this document |
 | --- | --- |
-| Product / Sponsor | <Reason> |
-| Developers | <Reason> |
-| QA / Testers | <Reason> |
-| Instructors / Evaluators | <Reason> |
-| End Users / Client Representatives | <Reason> |
+| Product / Sponsor | Confirm the system meets their needs and agree on scope, priorities, and open issues. |
+| Developers | Know what to build and how each feature must behave for Hosts and Guests. |
+| QA / Testers | Build test cases from each requirement and check the MVP, including offline counting and reconnect. |
+| Instructors / Evaluators | Assess the project's scope, completeness, and whether the final product matches the spec. |
+| End Users / Client Representatives | Check that the Host and Guest experience fits how they will use it, such as parking availability. |
 
 ### 1.4 Definitions, Acronyms, and Terms
 Define terms used throughout this document.
@@ -76,7 +74,7 @@ List supporting documents, such as project requirements, designs, mockups, polic
 
 | Document | Version / Date | Notes |
 | --- | --- | --- |
-| <Document name or link> | <Version or date> | <Notes> |
+| [Mockup](webapp-mockup.html) | 2026-11-02 | N/A |
 
 ### 1.6 Document Conventions
 Use consistent language and requirement IDs. Suggested conventions:
@@ -86,7 +84,7 @@ Use consistent language and requirement IDs. Suggested conventions:
 - **May:** Optional behavior
 - **IDs:** `FR-01` (functional), `NFR-01` (nonfunctional), `UI-01` (interface)
 
-<Additional conventions, if any>
+- **TBD:** Open questions are marked TBD and tracked in Appendix B.
 
 ## 2. Product Overview
 
@@ -157,7 +155,11 @@ Include relevant budgets, schedules, external dependencies, regulations, or assu
 ### 2.7 Design and Implementation Constraints
 List technical limitations, architecture rules, or compatibility requirements.
 
-<Design and implementation constraints>
+- Must be a web app usable in any browser. No native app required.
+- Sensors run on battery and connect over the Host's WiFi.
+- Sensors must store counts locally while offline and send them on reconnect.
+- Data must be stored indefinitely, including for removed or changed sensors and pools.
+- Counts must never be estimated or filled in.
 
 ### 2.8 User Documentation
 Describe planned manuals, tutorials, help guides, or online documentation.
@@ -176,7 +178,8 @@ Describe screens, navigation, CLI interactions, or other user-facing interfaces.
 - **Sensor management:** label, rename, reconfigure, or remove sensors.
 - **Pool management:** add in and out sensors, set capacity, rename, reconfigure, reset count, or remove pools.
 - **Historical data:** time window queries, breakdowns by vehicle type, direction, and speed, per-vehicle event history, export.
-- **Guest dashboard:**  and view its shared data. Simple and non-technical.
+- **Guest dashboard:** find the establishment and view its shared data. Simple and non-technical.
+- **Map view:** Host sees their pools on a map with live availability. Guests see shared lots on a map with their availability.
 - **Alerts:** set up threshold alerts and see system alerts.
 - Times are shown in a user-defined time zone.
 
@@ -190,7 +193,8 @@ Describe devices, sensors, peripherals, and required hardware compatibility.
 #### 3.1.3 Software Interfaces
 Describe integrations with other software, including APIs and data formats.
 
-<Software interface requirements>
+- Data export of aggregated results and per-vehicle events. Format TBD.
+- Alert delivery to the Host. Channels TBD (see ISS-03).
 
 #### 3.1.4 Communications Interfaces
 Describe networking, communication protocols, and message exchange requirements.
@@ -248,7 +252,7 @@ Repeat the following block for each functional requirement. Give every requireme
 - **Purpose / Description:** Host must be able to change a sensor's role.
 - **Inputs:** New role for the sensor.
 - **Processing:** Apply the new role to future vehicles only. History keeps the role the sensor had at the time.
-- **Outputs:** Current pool count is not changed (TBD, to confirm).
+- **Outputs:** Current pool count is not changed (TBD, see ISS-02).
 
 #### FR-08: Live Pool Availability
 
@@ -341,6 +345,20 @@ Repeat the following block for each functional requirement. Give every requireme
 - **Processing:** Show all times in that time zone.
 - **Outputs:** Times displayed in the chosen time zone.
 
+#### FR-21: Host Pool Map View
+
+- **Purpose / Description:** Host must be able to view their pools on a map.
+- **Inputs:** Location of each pool, set by the Host.
+- **Processing:** Place each pool on the map at its location. Keep each pool's data up to date.
+- **Outputs:** Map showing each pool with its live availability (number, capacity, percentage, full status). Pools with an offline sensor are flagged as potentially inaccurate.
+
+#### FR-22: Guest Lot Map View
+
+- **Purpose / Description:** Guests must be able to see an establishment's lots on a map with their availability.
+- **Inputs:** Guest opens the establishment's shared data.
+- **Processing:** Place each shared pool on the map at its location. Show only pools the Host chose to share. Update live within a reasonable delay.
+- **Outputs:** Simple map showing each lot with its availability value and "Full" status when full. No technical detail.
+
 ### 3.3 Performance Requirements
 Define measurable response-time, throughput, scalability, or resource-use targets.
 
@@ -388,3 +406,4 @@ Track unresolved issues and their status.
 | ISS-05 | Guest access method. | Open |
 | ISS-06 | How people inside a company share an account. | Open |
 | ISS-07 | Default time zone. | Open |
+| ISS-08 | How the Host sets a pool's location for the map view. | Open |
