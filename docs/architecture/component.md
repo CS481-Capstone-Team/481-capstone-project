@@ -24,7 +24,18 @@ A component is a separate thing that runs on its own: a device, a program, or an
 | Web app | User's browser | One app for both users. Hosts sign in to manage everything. Guests view shared data without an account. Shows the map. | Server, Map tile source |
 | Map tile source | Outside service | Supplies the map images the web app draws on. | Web app |
 
-### 2.1 Server modules
+### 2.1 Sensor node parts
+
+Physical parts of the sensor node, not separate components.
+
+| Part | Responsibility |
+| --- | --- |
+| Vehicle detectors (2 magnetometers) | Sense the magnetic change when a vehicle passes. Two are spaced apart along the lane: which one triggers first gives direction, and the time between them gives speed. |
+| Controller (Pico W) | Turns detector readings into vehicle events, stores them, and sends them to the server over WiFi. |
+| Battery | Powers the node. |
+| Enclosure (PETG) | Protects the parts from vehicle weight, water, and dirt. Non-magnetic, so the detectors can sense vehicles through it. |
+
+### 2.2 Server modules
 
 Parts of the server program, not separate components.
 
