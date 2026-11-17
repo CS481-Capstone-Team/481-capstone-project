@@ -42,12 +42,13 @@ Parts of the server program, not separate components.
 | Module | Responsibility | FRs |
 | --- | --- | --- |
 | Ingestion | Requests data from each sensor on a fixed interval. Receives batches of vehicle events and battery level, or an alive reply. No reply means the sensor is offline. | FR-03, FR-04 |
-| Accounts and access | Host sign-in and access control. | FR-01, FR-16 |
-| Sensor management | Labels, settings, removal, disregard, online/offline status, offline gaps. | FR-02, FR-05 |
-| Pools | Pool setup, roles, capacity, live count, reset, inaccuracy flag, map location. | FR-06 to FR-10, FR-21 |
+| Accounts and access | Host sign-in. Each Host sees only their own data. | FR-01 |
+| Sensor management | Labels, settings, removal, disregard, status (online/offline, battery), offline gaps. | FR-02, FR-05 |
+| Pool management | Pool setup, roles, capacity, live count, reset, inaccuracy flag, map location. | FR-06 to FR-10, FR-21 |
 | History and export | Past data queries, breakdowns, per-vehicle lists, export. | FR-12 to FR-14 |
 | Alerts | System and threshold alerts. | FR-18, FR-19 |
 | Guest sharing | What each Host shares, and serving it to Guests. | FR-16, FR-17, FR-22 |
+| Live updates | Sends changes from pool management, sensor management, and alerts to open Host and Guest views, each seeing only what it is allowed to. | FR-08, FR-11, FR-17, FR-21, FR-22 |
 
 ## 3. Diagram
 
@@ -74,20 +75,20 @@ flowchart LR
 | FR-03 Vehicle detection | Sensor node, Server (ingestion), Database |
 | FR-04 Offline counting | Sensor node, Server (ingestion) |
 | FR-05 Offline gaps | Server (sensor management), Database, Web app |
-| FR-06 Pool setup | Web app, Server (pools), Database |
-| FR-07 Role change | Server (pools), Database |
-| FR-08 Live availability | Server (pools), Web app |
-| FR-09 Pool reset | Web app, Server (pools) |
-| FR-10 Pools with offline sensors | Server (pools, sensor management), Web app |
-| FR-11 Host dashboard | Web app, Server |
+| FR-06 Pool setup | Web app, Server (pool management), Database |
+| FR-07 Role change | Server (pool management), Database |
+| FR-08 Live availability | Server (pool management, live updates), Web app |
+| FR-09 Pool reset | Web app, Server (pool management) |
+| FR-10 Pools with offline sensors | Server (pool management, sensor management), Web app |
+| FR-11 Host dashboard | Web app, Server (live updates) |
 | FR-12 Historical queries | Web app, Server (history), Database |
 | FR-13 Per-vehicle history | Web app, Server (history), Database |
 | FR-14 Export | Web app, Server (history) |
 | FR-15 Data retention | Database |
 | FR-16 Guest sharing | Web app, Server (sharing, accounts) |
-| FR-17 Guest view | Web app, Server (sharing) |
-| FR-18 System alerts | Sensor node, Server (alerts), Web app |
-| FR-19 Threshold alerts | Server (alerts, pools), Web app |
+| FR-17 Guest view | Web app, Server (sharing, live updates) |
+| FR-18 System alerts | Sensor node, Server (alerts, live updates), Web app |
+| FR-19 Threshold alerts | Server (alerts, pool management, live updates), Web app |
 | FR-20 Time zone | Web app |
-| FR-21 Host map | Web app, Map tile source, Server (pools) |
-| FR-22 Guest map | Web app, Map tile source, Server (sharing, pools) |
+| FR-21 Host map | Web app, Map tile source, Server (pool management, live updates) |
+| FR-22 Guest map | Web app, Map tile source, Server (sharing, pool management, live updates) |
