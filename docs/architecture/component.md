@@ -18,8 +18,8 @@ A component is a separate thing that runs on its own: a device, a program, or an
 
 | Component | Runs on | Responsibility | Talks to |
 | --- | --- | --- | --- |
-| Sensor node | Battery-powered device in the lane | Detects each vehicle and records direction, speed, and type. Keeps counting while offline and sends the counts later. Reports battery level. | Server |
-| Server | Backend | Receives sensor data. Applies all rules (pools, alerts, access). Answers the web app. | Sensor node, Database, Web app |
+| Sensor node | Battery-powered device in the lane | Detects each vehicle and records direction, speed, and type. Keeps counting while offline. Opens and keeps a connection to the server, and answers each server request over it with its stored events and battery level, or just that it is alive if it has no events. | Server |
+| Server | Backend | Requests data from each sensor on a fixed interval, over the connection the sensor opened. Applies all rules (pools, alerts, access). Answers the web app. | Sensor node, Database, Web app |
 | Database | Backend | Keeps all data indefinitely, including for removed sensors and pools. | Server |
 | Web app | User's browser | One app for both users. Hosts sign in to manage everything. Guests view shared data without an account. Shows the map. | Server, Map tile source |
 | Map tile source | Outside service | Supplies the map images the web app draws on. | Web app |
@@ -31,7 +31,7 @@ Physical parts of the sensor node, not separate components.
 | Part | Responsibility |
 | --- | --- |
 | Vehicle detectors (2 magnetometers) | Sense the magnetic change when a vehicle passes. Two are spaced apart along the lane: which one triggers first gives direction, and the time between them gives speed. |
-| Controller (Pico W) | Turns detector readings into vehicle events, stores them, and sends them to the server over WiFi. |
+| Controller (Pico W) | Turns detector readings into vehicle events, stores them, and returns them when the server asks, over WiFi. |
 | Battery | Powers the node. |
 | Enclosure (PETG) | Protects the parts from vehicle weight, water, and dirt. Non-magnetic, so the detectors can sense vehicles through it. |
 
@@ -41,9 +41,9 @@ Parts of the server program, not separate components.
 
 | Module | Responsibility | FRs |
 | --- | --- | --- |
-| Ingestion | Accepts data from sensors. | FR-03, FR-04 |
+| Ingestion | Requests data from each sensor on a fixed interval. Receives batches of vehicle events and battery level, or an alive reply. No reply means the sensor is offline. | FR-03, FR-04 |
 | Accounts and access | Host sign-in and access control. | FR-01, FR-16 |
-| Sensors | Labels, settings, removal, disregard, online/offline status, offline gaps. | FR-02, FR-05 |
+| Sensor management | Labels, settings, removal, disregard, online/offline status, offline gaps. | FR-02, FR-05 |
 | Pools | Pool setup, roles, capacity, live count, reset, inaccuracy flag, map location. | FR-06 to FR-10, FR-21 |
 | History and export | Past data queries, breakdowns, per-vehicle lists, export. | FR-12 to FR-14 |
 | Alerts | System and threshold alerts. | FR-18, FR-19 |
@@ -59,7 +59,7 @@ flowchart LR
     W["Web app<br/>(Host + Guest)"]
     T["Map tile source<br/>(outside)"]
 
-    S --> SV
+    SV <--> S
     SV <--> DB
     W <--> SV
     W --> T
@@ -70,15 +70,15 @@ flowchart LR
 | FR | Components |
 | --- | --- |
 | FR-01 Host sign-in | Web app, Server (accounts) |
-| FR-02 Sensor management | Web app, Server (sensors), Database |
+| FR-02 Sensor management | Web app, Server (sensor management), Database |
 | FR-03 Vehicle detection | Sensor node, Server (ingestion), Database |
 | FR-04 Offline counting | Sensor node, Server (ingestion) |
-| FR-05 Offline gaps | Server (sensors), Database, Web app |
+| FR-05 Offline gaps | Server (sensor management), Database, Web app |
 | FR-06 Pool setup | Web app, Server (pools), Database |
 | FR-07 Role change | Server (pools), Database |
 | FR-08 Live availability | Server (pools), Web app |
 | FR-09 Pool reset | Web app, Server (pools) |
-| FR-10 Pools with offline sensors | Server (pools, sensors), Web app |
+| FR-10 Pools with offline sensors | Server (pools, sensor management), Web app |
 | FR-11 Host dashboard | Web app, Server |
 | FR-12 Historical queries | Web app, Server (history), Database |
 | FR-13 Per-vehicle history | Web app, Server (history), Database |
