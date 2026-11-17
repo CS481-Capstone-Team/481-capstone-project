@@ -1,94 +1,94 @@
-# System component list
+# System Components
 
+**Project:** Vehicle Lane Counter System
 
-The following document is an overview of every major component of the Parking lot availability System. 
-It includes each component's purpose and responsibilities as well.
+## 1. Overview
 
+The system has four parts and one outside service:
 
-The system is divided into three main environments:
+- **Sensor node** counts vehicles in a lane.
+- **Server** holds the rules and connects everything.
+- **Database** keeps all data.
+- **Web app** is what Hosts and Guests see in a browser.
+- **Map tile source** (outside service) provides the map images.
 
-* **Sensor (Hardware):** Detects vehicles, records vehicle events, and stores data locally when offline.
+A component is a separate thing that runs on its own: a device, a program, or an outside service. Logic inside one of these is not a component.
 
-* **Server (Backend):** Receives sensor data, processes vehicle events, manages pools, handles accounts, and stores historical information.
+## 2. Components
 
-* **Client (Frontend):** Provides the web interface for Hosts and Guests to view and manage parking information.
+| Component | Runs on | Responsibility | Talks to |
+| --- | --- | --- | --- |
+| Sensor node | Battery-powered device in the lane | Detects each vehicle and records direction, speed, and type. Keeps counting while offline. Opens and keeps a connection to the server, and answers each server request over it with its stored events and battery level, or just that it is alive if it has no events. | Server |
+| Server | Backend | Requests data from each sensor on a fixed interval, over the connection the sensor opened. Applies all rules (pools, alerts, access). Answers the web app. | Sensor node, Database, Web app |
+| Database | Backend | Keeps all data indefinitely, including for removed sensors and pools. | Server |
+| Web app | User's browser | One app for both users. Hosts sign in to manage everything. Guests view shared data without an account. Shows the map. | Server, Map tile source |
+| Map tile source | Outside service | Supplies the map images the web app draws on. | Web app |
 
-  
+### 2.1 Sensor node parts
 
-| Component |	Runs on |	Responsibility | Talks to|
-| :---    | --- | --- | ---   |
-|Sensor Firmware | Sensor microcontroller (ESP32)  |Detects passing vehicles and records timestamp, direction, speed, and vehicle type. Stores events locally when offline and sends stored events after reconnecting. Reports sensor status and battery level.   |Vehicle Detection Hardware, Local Storage, Wi-Fi Network, Ingestion Service   |
-|Local Sensor Storage |Sensor microcontroller | Temporarily stores vehicle events when the sensor cannot communicate with the server. Preserves pending events until successful synchronization. |Sensor Firmware, Ingestion Service |
-|Ingestion service| Backend server |Receives vehicle events from sensors, validates incoming data, handles synchronization after reconnection, and forwards events for processing and storage. |Sensor Firmware, Backend API, Event Processing, Database |
-|Backend API | Backend server (Node.js or Phyton 3) | Receives vehicle events from sensors, validates incoming data, handles synchronization after reconnection, and forwards events for processing and storage. | Sensor Firmware, Backend API, Event Processing, Database|
-|Database | Database server (PostgreSQL)| Stores account information, sensor configurations, vehicle events, pool settings, historical records, sensor status, alerts, and Guest sharing settings. Preserves historical information when sensors or pools are removed or changed.|Backend API, Ingestion Service, Authentication, Sensor Management, Pool Management, Historical Data, Alert Service |
-|Data Buffer | Sensor microcontroller (ESP32) | Temporarily stores vehicle events when Wi-Fi is unavailable. Maintains pending events until the backend confirms successful receipt. Supports retransmission after reconnection. | Sensor Firmware and Data Synchronization|
-|Web app (Host + Guest) | User's Web browsers (React or Js) | Provides the user interface. Hosts can manage sensors, pools, alerts, and historical data. Guests can view establishment information and shared parking availability. Displays maps and live updates. | Backend API, External Map Provider |
-|Authentication & Access Control |Backend server | Verifies Host login credentials and manages permissions. Ensures Hosts can access only their own information, and Guests can access only data explicitly shared by the Host. |Backend API, Database, Web App |
-|Alert service Backend server (background module or worker) | Monitors sensor problems, including offline and low-battery conditions, and Host-defined pool thresholds. Creates alerts and makes them available to Hosts. Database, Sensor Management, Pool Management, Backend API, Host Dashboard |
-|Map provider (external) | External mapping service| Provides map functionality to display parking lot locations and pool availability on the Host and Guest dashboards. Does not calculate parking availability. Web App |
-|Sensor Management | Backend server | Manages sensor registration, labels, configurations, removal, connection status, and battery information. Preserves historical records when sensors are removed. Backend API, Database, Ingestion Service |
-|Event Processing & Pool Management | Backend server |Processes vehicle events and calculates pool counts, remaining capacity, availability percentages, and Full status. Handles IN/OUT sensor roles, manual resets, and offline sensor warnings. |Ingestion Service, Backend API, Database, Alert Service |
-|Historical Data & Export | Backend server Retrieves historical vehicle events and statistics. Supports time-based queries, breakdowns by vehicle type, direction, and speed, individual vehicle history, and data exports. |Backend API, Database, Web App |
-|Data Synchronization |Sensor firmware / communication logic | Sends pending events to the backend, retries unsuccessful transmissions, and handles acknowledgments| Data Buffer, Wi-Fi Connection, Ingestion Service|
-|Wi-Fi Connection| Network |Provide wireless communication between the sensor and backend server |Data Synchronization, Ingestion service |
-|Magnetometer Sensors| Sensor hardware Detect magnetic changes caused by passing vehicles. |Sensor Firmware |
+Physical parts of the sensor node, not separate components.
 
-<br>
+| Part | Responsibility |
+| --- | --- |
+| Vehicle detectors (2 magnetometers) | Sense the magnetic change when a vehicle passes. Two are spaced apart along the lane: which one triggers first gives direction, and the time between them gives speed. |
+| Controller (Pico W) | Turns detector readings into vehicle events, stores them, and returns them when the server asks, over WiFi. |
+| Battery | Powers the node. |
+| Enclosure (PETG) | Protects the parts from vehicle weight, water, and dirt. Non-magnetic, so the detectors can sense vehicles through it. |
 
- ## Sensor vs. Server Responsibilities
+### 2.2 Server modules
 
+Parts of the server program, not separate components.
 
-It is important to separate the responsibilities of the physical sensors from the backend server.
-<br>
+| Module | Responsibility | FRs |
+| --- | --- | --- |
+| Ingestion | Requests data from each sensor on a fixed interval. Receives batches of vehicle events and battery level, or an alive reply. No reply means the sensor is offline. | FR-03, FR-04 |
+| Accounts and access | Host sign-in. Each Host sees only their own data. | FR-01 |
+| Sensor management | Labels, settings, removal, disregard, status (online/offline, battery), offline gaps. | FR-02, FR-05 |
+| Pool management | Pool setup, roles, capacity, live count, reset, inaccuracy flag, map location. | FR-06 to FR-10, FR-21 |
+| History and export | Past data queries, breakdowns, per-vehicle lists, export. | FR-12 to FR-14 |
+| Alerts | System and threshold alerts. | FR-18, FR-19 |
+| Guest sharing | What each Host shares, and serving it to Guests. | FR-16, FR-17, FR-22 |
+| Live updates | Sends changes from pool management, sensor management, and alerts to open Host and Guest views, each seeing only what it is allowed to. | FR-08, FR-11, FR-17, FR-21, FR-22 |
 
-**Sensor Responsibilities**
+## 3. Diagram
 
-* Detect passing vehicles.
+```mermaid
+flowchart LR
+    S["Sensor node"]
+    SV["Server"]
+    DB[("Database")]
+    W["Web app<br/>(Host + Guest)"]
+    T["Map tile source<br/>(outside)"]
 
-* Record individual vehicle events.
+    SV <--> S
+    SV <--> DB
+    W <--> SV
+    W --> T
+```
 
-* Store events locally when Wi-Fi is unavailable.
+## 4. Requirement coverage
 
-* Synchronize stored events after reconnecting.
-
-* Report sensor status and battery information.
-
-<br>
-
-**Server Responsibilities**
-
-* Receive and process vehicle events.
-
-* Calculate pool counts and parking availability.
-
-* Manage Host accounts, sensors, and pools.
-
-* Control Host and Guest permissions.
-
-* Store historical data and generate exports.
-
-* Manage alerts and threshold notifications.
-
-* Provide information to the Web App.
-
-
-
-<br>
- **Communication Between Components**
-
- | Communication | Possible Technology | Purpose |
- | --- | --- | ---|
-| Magnetometer Sensors → Sensor Firmware |Sensor hardware interface | Vehicles detection | 
-| Sensor Firmware → Data Buffer |Local storage and MicroPython |Saves detected vehicle events locally, including timestamps, direction, speed, and vehicle type when available. | 
-| Data Buffer → Data Synchronization | MicroPython and Local storage access |Retrieves pending vehicle events that need to be transmitted to the backend. | 
-| Data Synchronization → Backend Ingestion Service |Wi-Fi with HTTPS and JSON | Retrieves pending vehicle events that need to be transmitted to the backend. | 
-| Backend Ingestion Service → Sensor | HTTPS acknolegment response |Confirms successful event receipt so the sensor can remove acknowledged events from its buffer. | 
-| Web Application → Backend API|REST API / HTTPS, JSON and WebSocket |Sends requests and retrieves sensor information, pool availability, and historical data. |
-| Backend → Database|PostgreSQL | Stores and retrieves accounts, sensors, vehicle events, pools, alerts, and historical records.| 
-| Backend → Web Application| JavaScript and React  |Provides updated information for the Host dashboard and Guest view. | 
-| Web Application → Map Provider| Map API|Displays sensor locations and parking-lot locations on the map. | 
-
-
- 
-
+| FR | Components |
+| --- | --- |
+| FR-01 Host sign-in | Web app, Server (accounts) |
+| FR-02 Sensor management | Web app, Server (sensor management), Database |
+| FR-03 Vehicle detection | Sensor node, Server (ingestion), Database |
+| FR-04 Offline counting | Sensor node, Server (ingestion) |
+| FR-05 Offline gaps | Server (sensor management), Database, Web app |
+| FR-06 Pool setup | Web app, Server (pool management), Database |
+| FR-07 Role change | Server (pool management), Database |
+| FR-08 Live availability | Server (pool management, live updates), Web app |
+| FR-09 Pool reset | Web app, Server (pool management) |
+| FR-10 Pools with offline sensors | Server (pool management, sensor management), Web app |
+| FR-11 Host dashboard | Web app, Server (live updates) |
+| FR-12 Historical queries | Web app, Server (history), Database |
+| FR-13 Per-vehicle history | Web app, Server (history), Database |
+| FR-14 Export | Web app, Server (history) |
+| FR-15 Data retention | Database |
+| FR-16 Guest sharing | Web app, Server (sharing, accounts) |
+| FR-17 Guest view | Web app, Server (sharing, live updates) |
+| FR-18 System alerts | Sensor node, Server (alerts, live updates), Web app |
+| FR-19 Threshold alerts | Server (alerts, pool management, live updates), Web app |
+| FR-20 Time zone | Web app |
+| FR-21 Host map | Web app, Map tile source, Server (pool management, live updates) |
+| FR-22 Guest map | Web app, Map tile source, Server (sharing, pool management, live updates) |
