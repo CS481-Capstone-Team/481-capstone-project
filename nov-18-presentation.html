@@ -165,6 +165,13 @@
   section.title { position: relative; overflow: hidden; }
   .road { position: absolute; left: 0; right: 0; bottom: 12%; height: 0.25em; background: repeating-linear-gradient(90deg, #cbd2d9 0 2em, transparent 2em 3.5em); }
   .car { position: absolute; bottom: calc(12% + 0.3em); left: 0; width: 5em; animation: drive 6s linear infinite; }
+  .lane { position: absolute; left: 0; right: 0; bottom: 12%; height: 4em; pointer-events: none; }
+  .tcar { position: absolute; left: 0; bottom: 0.3em; width: 5em; z-index: 1; will-change: transform; }
+  .tcar svg { display: block; width: 100%; }
+  .sensor-dot { position: absolute; left: 50%; bottom: -0.425em; width: 1.1em; height: 1.1em; margin-left: -0.55em; border-radius: 50%; background: #111827; transition: box-shadow 0.15s; }
+  .sensor-dot.hit { box-shadow: 0 0 0 0.35em rgba(245, 158, 11, 0.55); }
+  .count { position: absolute; left: 50%; bottom: 3.4em; transform: translateX(-50%); text-align: center; color: #6b7280; font-size: 0.55em; white-space: nowrap; }
+  .count b { display: block; color: #1f2933; font-size: 2.4em; font-variant-numeric: tabular-nums; line-height: 1.1; }
   @keyframes drive { from { transform: translateX(-6em); } to { transform: translateX(100vw); } }
 </style>
 </head>
@@ -385,6 +392,13 @@
   </div>
 </section>
 
+<section class="title">
+  <h1>Thank you</h1>
+  <h2>Questions?</h2>
+  <div class="road"></div>
+  <div class="lane"><div class="count"><b>0</b>vehicles counted</div><div class="sensor-dot"></div></div>
+</section>
+
 <div id="counter"></div>
 
 <script>
@@ -404,6 +418,60 @@
   });
 
   show((parseInt(new URLSearchParams(location.search).get("slide")) || 1) - 1);
+
+  // Thank-you slide: cars drive over the sensor and the count ticks up
+  const lane = document.querySelector(".lane");
+  if (lane) {
+    const slide = lane.closest("section");
+    const dot = lane.querySelector(".sensor-dot");
+    const countEl = lane.querySelector(".count b");
+    const colors = ["#3b82f6", "#ef4444", "#10b981", "#f59e0b", "#8b5cf6"];
+    const carSvg = (c) => `<svg viewBox="0 0 100 45"><g transform="matrix(-1 0 0 1 100 0)"><path d="M8 32 V24 Q8 20 14 19 L30 17 L42 7 Q45 5 50 5 H68 Q73 5 77 9 L86 18 Q94 19 95 24 V32 Z" style="fill:${c}"/><path d="M45 9 H58 V18 H35 Z M62 9 H69 Q72 9 74 11 L80 18 H62 Z" fill="#dbeafe"/><circle cx="26" cy="33" r="8" fill="#1f2933"/><circle cx="26" cy="33" r="3.5" fill="#9aa5b1"/><circle cx="76" cy="33" r="8" fill="#1f2933"/><circle cx="76" cy="33" r="3.5" fill="#9aa5b1"/><rect x="90" y="22" width="5" height="3" rx="1" fill="#fde68a"/></g></svg>`;
+    const cars = [0, 1, 2].map((k) => {
+      const el = document.createElement("div");
+      el.className = "tcar";
+      el.innerHTML = carSvg(colors[k]);
+      lane.appendChild(el);
+      return { el, k };
+    });
+    let count = 0, last = 0, active = false, colorIdx = cars.length;
+
+    function reset() {
+      const w = lane.clientWidth;
+      count = 0;
+      countEl.textContent = 0;
+      cars.forEach((car) => { car.x = -car.el.offsetWidth - car.k * (w / 3); car.counted = false; });
+    }
+
+    function tick(t) {
+      const dt = Math.min(t - last, 50);
+      last = t;
+      const on = slide.classList.contains("active");
+      if (on && !active) reset();
+      active = on;
+      if (on) {
+        const w = lane.clientWidth, speed = w / 6000;
+        cars.forEach((car) => {
+          const cw = car.el.offsetWidth;
+          car.x += speed * dt;
+          if (!car.counted && car.x + cw / 2 >= w / 2) {
+            car.counted = true;
+            countEl.textContent = ++count;
+            dot.classList.add("hit");
+            setTimeout(() => dot.classList.remove("hit"), 200);
+          }
+          if (car.x > w) {
+            car.x -= w + cw;
+            car.counted = false;
+            car.el.querySelector("path").style.fill = colors[colorIdx++ % colors.length];
+          }
+          car.el.style.transform = `translateX(${car.x}px)`;
+        });
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame((t) => { last = t; tick(t); });
+  }
 </script>
 
 </body>
