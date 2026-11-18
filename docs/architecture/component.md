@@ -31,7 +31,7 @@ Physical parts of the sensor node, not separate components.
 | Part | Responsibility |
 | --- | --- |
 | Vehicle detectors (2 magnetometers) | Sense the magnetic change when a vehicle passes. Two are spaced apart along the lane: which one triggers first gives direction, and the time between them gives speed. |
-| Controller (Pico W) | Turns detector readings into vehicle events, stores them, and returns them when the server asks, over WiFi. |
+| Controller (Pico 2 W) | Turns detector readings into vehicle events, stores them, and returns them when the server asks, over WiFi. |
 | Battery | Powers the node. |
 | Enclosure (PETG) | Protects the parts from vehicle weight, water, and dirt. Non-magnetic, so the detectors can sense vehicles through it. |
 
@@ -43,7 +43,7 @@ Parts of the server program, not separate components.
 | --- | --- | --- |
 | Ingestion | Requests data from each sensor on a fixed interval. Receives batches of vehicle events and battery level, or an alive reply. No reply means the sensor is offline. Records online/offline status, battery level, and offline gaps. | FR-03, FR-04, FR-05 |
 | Accounts and access | Host sign-in. Each Host sees only their own data. | FR-01 |
-| Sensor and pool management | Host labels, renames, configures, removes, or disregards sensors. Host sets up pools: sensors and their roles, capacity, map location, reset. Keeps each pool's live count and inaccuracy flag. A sensor belongs to at most one pool. | FR-02, FR-06 to FR-10, FR-21 |
+| Sensor and pool management | Host labels, renames, configures, removes, or disregards sensors. Host sets up pools: sensors and their roles, capacity, map location, reset. Works out each pool's live count and inaccuracy flag (see 2.4). A sensor belongs to at most one pool. | FR-02, FR-06 to FR-10, FR-21 |
 | History and export | Past data queries, breakdowns, per-vehicle lists, export. | FR-12 to FR-14 |
 | Alerts | System and threshold alerts. | FR-18, FR-19 |
 | Guest sharing | What each Host shares, and serving it to Guests. | FR-16, FR-17, FR-22 |
@@ -58,8 +58,19 @@ Major tables in the database, not separate components.
 | accounts | Hosts and their settings. | FR-01 |
 | sensors | Each sensor device, its label, and status. | FR-02 |
 | vehicle_events | Every detected vehicle. | FR-03, FR-12 to FR-14 |
-| pools | Each pool, its capacity, and map location. | FR-06, FR-21 |
+| pools | Each pool, its capacity, map location, and last reset (`reset_at`, `reset_count`). | FR-06, FR-09, FR-21 |
 | pool_sensors | Which pool each sensor belongs to, and its role over time. A sensor belongs to at most one pool. | FR-06, FR-07 |
+
+### 2.4 Pool count
+
+A pool's count is not stored. It is worked out from vehicle events:
+
+`count = reset_count + "in" events − "out" events`, for events after `reset_at` from the pool's current sensors and roles.
+
+- Host reset or setting the count by hand: `reset_at` = now, `reset_count` = the new value.
+- Changing the pool's sensors or roles: `reset_at` = now, `reset_count` = the current count. The count stays the same and the change applies to future vehicles only.
+- Late events from an offline sensor are added by their timestamp, so the count corrects itself. Events from before `reset_at` are not counted.
+- The inaccuracy flag is on while any of the pool's sensors is offline.
 
 ## 3. Diagram
 
