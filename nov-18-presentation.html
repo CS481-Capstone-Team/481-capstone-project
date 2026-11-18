@@ -106,55 +106,21 @@
   <p>The International Capstoners</p>
   <p>Guilherme, Zachary, Monica</p>
 </section>
-
 <section class="diagram-slide">
   <h2>Components + Stack</h2>
   <ul class="note"><li>Pills show what is inside each component: parts, modules, views, or tables.</li></ul>
-  <div class="cards">
-    <div class="card" style="--c:#f59e0b">
-      <div class="card-head"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M8 8a5.6 5.6 0 0 0 0 8M16 8a5.6 5.6 0 0 1 0 8M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14"/></svg><b>Sensor</b></div>
-      <div class="tech">Python</div>
-      <div class="chips"><span class="chip">Pico W</span><span class="chip">2× QMC5883L</span><span class="chip">LiPo 3000mAh</span><span class="chip">PETG case</span></div>
-    </div>
-    <div class="card" style="--c:#3b82f6">
-      <div class="card-head"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01"/></svg><b>Server</b></div>
-      <div class="tech">Node.js</div>
-      <div class="chips"><span class="chip">Ingestion</span><span class="chip">Accounts</span><span class="chip">Sensor mgmt</span><span class="chip">Pool mgmt</span><span class="chip">History + export</span><span class="chip">Alerts</span><span class="chip">Guest sharing</span><span class="chip">Live updates</span></div>
-    </div>
-    <div class="card" style="--c:#10b981">
-      <div class="card-head"><svg class="icon" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20M6 6.5h.01M9 6.5h.01"/></svg><b>Web app</b></div>
-      <div class="tech">React + MapLibre</div>
-      <div class="chips"><span class="chip">Host view</span><span class="chip">Guest view</span></div>
-    </div>
-    <div class="card" style="--c:#8b5cf6">
-      <div class="card-head"><svg class="icon" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg><b>Database</b></div>
-      <div class="tech">PostgreSQL</div>
-      <div class="chips"><span class="chip">accounts</span><span class="chip">sensors</span><span class="chip">vehicle_events</span><span class="chip">pools</span><span class="chip">pool_sensors</span></div>
-      
-    </div>
-    <div class="card outside" style="--c:#9ca3af">
-      <div class="card-head"><svg class="icon" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><b>Map tiles</b></div>
-      <div class="tech">OpenFreeMap</div>
-      
-    </div>
-  </div>
-  <p class="legend">Sensor ⟶ server over WebSocket</p>
-</section>
-
-<section class="diagram-slide">
-  <h2>Components + Stack <span class="cont">(continued)</span></h2>
   <div class="detail">
     <div class="dcol" style="--c:#f59e0b">
       <div class="dhead"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M8 8a5.6 5.6 0 0 0 0 8M16 8a5.6 5.6 0 0 1 0 8M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14"/></svg><b>Sensor</b><span class="tech">Python</span></div>
-      <div class="drow"><span class="chip">Pico W</span><span class="dtext">controller with WiFi, runs the code</span></div><div class="drow"><span class="chip">2× QMC5883L</span><span class="dtext">magnetometers: order gives direction, gap gives speed</span></div><div class="drow"><span class="chip">LiPo 3000mAh</span><span class="dtext">rechargeable battery</span></div><div class="drow"><span class="chip">PETG case</span><span class="dtext">tough and non-magnetic</span></div>
+      <div class="drow"><span class="chip">Raspberry Pi Pico W</span><span class="dtext">controller with WiFi, runs the code</span></div><div class="drow"><span class="chip">2× QMC5883L magnetometers</span><span class="dtext">order gives direction, gap gives speed</span></div><div class="drow"><span class="chip">3.7V LiPo battery, 3000mAh</span><span class="dtext">powers the sensor, rechargeable</span></div><div class="drow"><span class="chip">PETG enclosure</span><span class="dtext">tough and non-magnetic</span></div>
     </div>
     <div class="dcol" style="--c:#3b82f6">
       <div class="dhead"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01"/></svg><b>Server</b><span class="tech">Node.js</span></div>
-      <div class="drow"><span class="chip">Ingestion</span><span class="dtext">asks sensors for data</span></div><div class="drow"><span class="chip">Accounts</span><span class="dtext">Host sign-in, own data only</span></div><div class="drow"><span class="chip">Sensor mgmt</span><span class="dtext">labels, status, offline gaps</span></div><div class="drow"><span class="chip">Pool mgmt</span><span class="dtext">roles, capacity, live count</span></div><div class="drow"><span class="chip">History + export</span><span class="dtext">past data and downloads</span></div><div class="drow"><span class="chip">Alerts</span><span class="dtext">offline, battery, thresholds</span></div><div class="drow"><span class="chip">Guest sharing</span><span class="dtext">what Guests can see</span></div><div class="drow"><span class="chip">Live updates</span><span class="dtext">pushes changes to open screens</span></div>
+      <div class="drow"><span class="chip">Data ingestion</span><span class="dtext">asks sensors for data, tracks status</span></div><div class="drow"><span class="chip">Accounts and access</span><span class="dtext">Host sign-in, own data only</span></div><div class="drow"><span class="chip">Sensor and pool management</span><span class="dtext">Host sets up sensors and pools, keeps live counts</span></div><div class="drow"><span class="chip">History + export</span><span class="dtext">past data, gaps, downloads</span></div><div class="drow"><span class="chip">Alerts</span><span class="dtext">offline, battery, thresholds</span></div><div class="drow"><span class="chip">Guest sharing</span><span class="dtext">what Guests can see</span></div><div class="drow"><span class="chip">Live updates</span><span class="dtext">pushes changes to open screens</span></div>
     </div>
     <div class="dcol" style="--c:#10b981">
       <div class="dhead"><svg class="icon" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20M6 6.5h.01M9 6.5h.01"/></svg><b>Web app</b><span class="tech">React + MapLibre</span></div>
-      <div class="drow"><span class="chip">Host view</span><span class="dtext">manage sensors, pools, alerts</span></div><div class="drow"><span class="chip">Guest view</span><span class="dtext">read-only shared lots, no account</span></div>
+      <div class="drow"><span class="chip">Host dashboard</span><span class="dtext">manage sensors, pools, alerts</span></div><div class="drow"><span class="chip">Guest dashboard</span><span class="dtext">read-only shared lots, no account</span></div>
     </div>
     <div class="dcol" style="--c:#8b5cf6">
       <div class="dhead"><svg class="icon" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg><b>Database</b><span class="tech">PostgreSQL</span></div>
