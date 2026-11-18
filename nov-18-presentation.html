@@ -76,6 +76,9 @@
   .contract-card pre { margin: 0; font-family: Consolas, monospace; font-size: 0.85em; line-height: 1.45; white-space: pre; color: #1f2933; }
   .k { color: #2563eb; font-weight: bold; }
   .v { color: #b45309; }
+  .ph { display: inline-block; font-weight: bold; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.05em; padding: 0 0.5em; border-radius: 1em; margin-top: 0.3em; }
+  .ph.setup { background: #ede9fe; color: #6d28d9; }
+  .ph.flow { background: #d1fae5; color: #065f46; }
   .note { margin: 0 0 1em; color: #6b7280; font-size: 0.7em; }
   /* Components detail slide */
   .cont { color: #9aa5b1; font-weight: normal; font-size: 0.6em; }
@@ -171,22 +174,31 @@
     </div>
   </div>
   <div class="contracts">
-    <div class="contract-card"><div class="cc-head"><i class="badge">A</i><b>Sensor ⟶ Server</b><span class="proto">WebSocket</span></div><pre><span class="k">server</span>  GET
+    <div class="contract-card"><div class="cc-head"><i class="badge">A</i><b>Sensor ⟶ Server</b><span class="proto">WebSocket over TLS</span></div><pre><span class="ph setup">setup</span> <span class="v">on each connect</span>
+<span class="k">sensor</span>  opens wss, sends { id, token }
+<span class="k">server</span>  checks token, else closes
+<span class="ph flow">flow</span> <span class="v">every interval</span>
+<span class="k">server</span>  GET
 <span class="k">sensor</span>  { battery: <span class="v">critical|low|medium|high</span>,
           events: [{ timestamp, direction, vehicle_type, speed }] }
 <span class="v">no reply → sensor down</span></pre></div>
-    <div class="contract-card"><div class="cc-head"><i class="badge">B</i><b>Web app ⇄ Server</b><span class="proto">HTTPS + WebSocket</span></div><pre><span class="k">REST</span>  POST /login
-      GET  /sensors  /pools
+    <div class="contract-card"><div class="cc-head"><i class="badge">B</i><b>Web app ⇄ Server</b><span class="proto">HTTPS + WebSocket</span></div><pre><span class="ph setup">setup</span> <span class="v">Host config</span>
+<span class="k">REST</span>  POST /login
+      POST /sensors { id, claim_code }
+      PUT  /pools  /sharing  /pools/:id/count
+<span class="ph flow">flow</span> <span class="v">live + history</span>
+<span class="k">REST</span>  GET  /sensors  /pools  /export
       GET  /history?sensor&amp;from&amp;to
-      GET  /export     PUT /sharing
-<span class="k">push</span>  { type: "pool", id, count,
-          capacity, full }</pre></div>
-    <div class="contract-card"><div class="cc-head"><i class="badge">C</i><b>Server ⇄ Database</b><span class="proto">SQL</span></div><pre><span class="k">write</span>  vehicle events, sensor status + gaps,
-       Host setup (sensors, pools, roles)
+<span class="k">push</span>  { type: "pool", id, count, capacity, full }</pre></div>
+    <div class="contract-card"><div class="cc-head"><i class="badge">C</i><b>Server ⇄ Database</b><span class="proto">SQL</span></div><pre><span class="ph setup">setup</span> <span class="v">Host config</span>
+<span class="k">write</span>  sensors, pools, roles, resets, sharing
+<span class="ph flow">flow</span> <span class="v">every interval + queries</span>
+<span class="k">write</span>  vehicle events, sensor status + gaps
 <span class="k">read</span>   history by sensor + time window,
        current setup and status
 <span class="v">only the server touches the DB</span></pre></div>
-    <div class="contract-card"><div class="cc-head"><i class="badge">D</i><b>Map tiles ⟶ Web app</b><span class="proto">HTTPS</span></div><pre><span class="k">GET</span>  tiles.openfreemap.org
+    <div class="contract-card"><div class="cc-head"><i class="badge">D</i><b>Map tiles ⟶ Web app</b><span class="proto">HTTPS</span></div><pre><span class="ph flow">flow</span> <span class="v">when the map opens</span>
+<span class="k">GET</span>  tiles.openfreemap.org
        /styles/liberty
 <span class="k">←</span>    vector map tiles</pre></div>
   </div>
