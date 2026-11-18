@@ -29,6 +29,7 @@
 | Service | Choice | Why |
 | --- | --- | --- |
 | Map tiles | OpenFreeMap | Free, no API key, no usage limits. Works with MapLibre. |
+| Host sign-in | Google sign-in (OAuth) | No passwords to store. Google handles 2FA and account recovery. |
 | Alert delivery (ISS-03) | In-app only for MVP. Email service later, provider TBD. | No outside service needed for MVP. Email reaches the Host when the app is closed. |
 
 ## 4. Deployment Diagram
