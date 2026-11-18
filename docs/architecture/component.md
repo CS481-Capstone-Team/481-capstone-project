@@ -50,6 +50,18 @@ Parts of the server program, not separate components.
 | Guest sharing | What each Host shares, and serving it to Guests. | FR-16, FR-17, FR-22 |
 | Live updates | Sends changes from pool management, sensor management, and alerts to open Host and Guest views, each seeing only what it is allowed to. | FR-08, FR-11, FR-17, FR-21, FR-22 |
 
+### 2.3 Database tables
+
+Major tables in the database, not separate components.
+
+| Table | Holds | FRs |
+| --- | --- | --- |
+| accounts | Hosts and their settings. | FR-01 |
+| sensors | Each sensor device, its label, and status. | FR-02 |
+| vehicle_events | Every detected vehicle. | FR-03, FR-12 to FR-14 |
+| pools | Each pool, its capacity, and map location. | FR-06, FR-21 |
+| pool_sensors | Which pool each sensor belongs to, and its role over time. A sensor belongs to at most one pool. | FR-06, FR-07 |
+
 ## 3. Diagram
 
 ```mermaid
