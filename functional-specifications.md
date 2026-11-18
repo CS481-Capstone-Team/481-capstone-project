@@ -30,6 +30,8 @@ Define the system or feature boundary.
 - Parking recommendation for Guest entering establishments having more than one Parking lot.
 - Host knows when a sensor goes down
 - Host can wirelessly disregard a sensor
+- Host connects each sensor to their WiFi from a phone, with no app needed.
+- Host adds a sensor to their account with the ID and claim code printed on it.
 
 **Out of scope**
 - How people inside a company share an account (out of MVP scope).
@@ -68,6 +70,8 @@ Define terms used throughout this document.
 | Vehicle event | A single detected vehicle, with its timestamp, direction, speed, and vehicle type. |
 | Sensor offline | Period when a sensor is not connected. Shown as a visible gap in history. |
 | Establishment | The place a Guest looks up to view shared data (e.g., a shopping mall). |
+| Setup mode | State in which a sensor opens its own WiFi network so the Host can give it their WiFi details. |
+| Claim code | Secret code printed on a sensor. Used with the sensor ID to add the sensor to a Host's account. |
 
 ### 1.5 Reference Documents
 List supporting documents, such as project requirements, designs, mockups, policies, or standards.
@@ -116,6 +120,7 @@ Describe the user groups, their needs, and relevant characteristics.
 Summarize the product's major features and expected capabilities.
 
 - Vehicle counting with direction, speed, and vehicle type per vehicle.
+- Sensor setup: connect to the Host's WiFi, add to the Host's account.
 - Sensor management: label, rename, reconfigure, remove.
 - Pools: combine in and out sensors, set capacity, show live availability and "Full" status, manual reset.
 - Host dashboard with live sensor stats, pool availability, and sensor status.
@@ -141,7 +146,7 @@ Describe supported hardware, software, networks, and dependencies.
 
 - Web app, usable on any device with a browser.
 - Sensors are installed in a lane by the user.
-- Sensors connect to the user's WiFi.
+- Sensors connect to the user's WiFi. WPA2 or WPA3 password WiFi only.
 - Sensors run on battery.
 
 ### 2.6 General Constraints, Assumptions, Dependencies, and Guidelines
@@ -150,6 +155,7 @@ Include relevant budgets, schedules, external dependencies, regulations, or assu
 - MVP supports 1 account and 2 sensors.
 - MVP must work as expected through a simulated downtime, with counts reconciling on reconnect.
 - The host installs the sensor and provides WiFi.
+- WiFi that needs a per-user login (company WiFi) or a sign-in web page (hotel or guest WiFi) is not supported.
 - Vehicle type accuracy depends on sensor precision.
 
 ### 2.7 Design and Implementation Constraints
@@ -175,6 +181,8 @@ Describe screens, navigation, CLI interactions, or other user-facing interfaces.
 
 - **Host sign-in:** account login.
 - **Host dashboard:** live per-sensor stats, per-pool availability (number, capacity, percentage, full status), and sensor status (offline, low battery, and similar). More widgets may be added later.
+- **Sensor setup page:** opened from a phone joined to the sensor's setup network. Host picks their WiFi and enters its password.
+- **Add sensor:** Host enters a sensor's ID and claim code to add it to their account.
 - **Sensor management:** label, rename, reconfigure, or remove sensors.
 - **Pool management:** add in and out sensors, set capacity, rename, reconfigure, reset count, or remove pools.
 - **Historical data:** time window queries, breakdowns by vehicle type, direction, and speed, per-vehicle event history, export.
@@ -189,6 +197,8 @@ Describe devices, sensors, peripherals, and required hardware compatibility.
 - Sensor is embedded in a lane and detects each vehicle passing over it.
 - Sensor runs on battery and reports low battery.
 - Sensor keeps counting while offline. It stops only when out of battery or damaged.
+- Sensor has a reset button. Holding it puts the sensor into setup mode.
+- Sensor case shows its ID, claim code, and setup network password.
 
 #### 3.1.3 Software Interfaces
 Describe integrations with other software, including APIs and data formats.
@@ -200,6 +210,7 @@ Describe integrations with other software, including APIs and data formats.
 Describe networking, communication protocols, and message exchange requirements.
 
 - Sensors connect to the user's WiFi.
+- In setup mode, the sensor opens its own password-protected WiFi network (e.g., `LaneSensor-1234`).
 - Counts made while offline are sent once the sensor reconnects.
 
 ### 3.2 Functional Requirements
@@ -359,6 +370,20 @@ Repeat the following block for each functional requirement. Give every requireme
 - **Processing:** Place each shared pool on the map at its location. Show only pools the Host chose to share. Update live within a reasonable delay.
 - **Outputs:** Simple map showing each lot with its availability value and "Full" status when full. No technical detail.
 
+#### FR-23: Sensor WiFi Setup
+
+- **Purpose / Description:** Host must be able to connect a sensor to their WiFi from a phone, with no app.
+- **Inputs:** Sensor in setup mode (first power-on, no saved WiFi, or reset button held). Host's WiFi name and password.
+- **Processing:** Sensor opens its own WiFi network. Host joins it from a phone and a setup page opens. Host picks their WiFi and enters the password. Sensor saves it, closes its network, and joins the Host's WiFi. Setup mode ends on its own after a few minutes if unused.
+- **Outputs:** Sensor is connected to the Host's WiFi and shows as online. If it cannot join, it goes back to setup mode and the setup page shows the error.
+
+#### FR-24: Add Sensor to Account
+
+- **Purpose / Description:** Host must be able to add a sensor to their account.
+- **Inputs:** Sensor ID and claim code printed on the sensor.
+- **Processing:** Check that the ID and claim code match and that the sensor is not in another account. Link the sensor to the Host's account.
+- **Outputs:** Sensor appears in the Host's sensor list, ready to label (FR-02). Wrong code or a sensor already in another account shows an error.
+
 ### 3.3 Performance Requirements
 Define measurable response-time, throughput, scalability, or resource-use targets.
 
@@ -370,6 +395,8 @@ Describe access control, data protection, and other security requirements.
 
 - Host must sign in with an account login.
 - An account can only access its own sensors.
+- A sensor can be added to an account only with its claim code.
+- A sensor's setup network is password-protected and open only in setup mode.
 - Guests have read-only access.
 - Guests see only the pools or sensors the Host chooses to share.
 
