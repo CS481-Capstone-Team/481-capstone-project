@@ -114,6 +114,50 @@
   .rule { background: #fff; border-radius: 0.6em; border-left: 0.3em solid var(--c); box-shadow: 0 0.2em 0.8em rgba(0, 0, 0, 0.08); padding: 0.6em 0.8em; font-size: 0.55em; }
   .rule b { display: block; color: var(--c); margin-bottom: 0.3em; }
   .rule p { margin: 0; color: #4b5563; line-height: 1.4; }
+  /* Sensor security slide */
+  .sflow { flex: 1; display: grid; grid-template-columns: 0.85fr auto 0.85fr auto 1fr; align-items: center; font-size: 0.75em; }
+  .zone { background: #fff; border-radius: 0.8em; border-top: 0.3em solid var(--c); box-shadow: 0 0.2em 0.8em rgba(0, 0, 0, 0.08); padding: 0.8em; display: flex; flex-direction: column; gap: 0.45em; }
+  .zone-head { display: flex; align-items: center; gap: 0.4em; margin-bottom: 0.2em; }
+  .zone-head .icon { margin: 0; width: 1.1em; height: 1.1em; }
+  .zone-head small { margin-left: auto; color: #6b7280; font-size: 0.6em; }
+  .item { display: flex; align-items: center; gap: 0.5em; padding: 0.4em 0.6em; border-radius: 0.5em; background: color-mix(in srgb, var(--k) 12%, white); font-size: 0.65em; }
+  .item .icon { stroke: var(--k); margin: 0; width: 1.3em; height: 1.3em; flex-shrink: 0; }
+  .item b { color: #1f2933; }
+  .item small { display: block; color: #6b7280; font-size: 0.85em; }
+  .op { text-align: center; color: #9aa5b1; font-weight: bold; font-size: 0.7em; line-height: 1; }
+  .results { display: flex; gap: 0.4em; justify-content: center; }
+  .results .tag { margin: 0; }
+  .link { width: 9em; padding: 0 0.6em 0 0.4em; text-align: center; font-size: 0.55em; color: #6b7280; line-height: 1.3; }
+  .link .line { position: relative; height: 0.25em; margin: 0.5em 0; border-radius: 1em; background: var(--k); }
+  .link .line::after { content: ""; position: absolute; right: -0.3em; top: 50%; transform: translateY(-50%); border-left: 0.8em solid var(--k); border-top: 0.5em solid transparent; border-bottom: 0.5em solid transparent; }
+  .tunnel { width: 17em; padding: 0 1.6em 0 0.6em; text-align: center; font-size: 0.55em; color: #6b7280; line-height: 1.3; }
+  .pipe { position: relative; margin: 0.5em 0; padding: 0.6em 0.8em; border-radius: 2em; background: #d1fae5; border: 0.15em solid #10b981; display: flex; align-items: center; justify-content: center; gap: 0.4em; }
+  .pipe::after { content: ""; position: absolute; right: -1.1em; top: 50%; transform: translateY(-50%); border-left: 1em solid #10b981; border-top: 0.7em solid transparent; border-bottom: 0.7em solid transparent; }
+  .pipe .icon { margin: 0; width: 1.4em; height: 1.4em; stroke: #10b981; flex-shrink: 0; }
+  .pill { font-family: Consolas, monospace; font-size: 0.9em; padding: 0.15em 0.6em; border-radius: 1em; white-space: nowrap; }
+  .pill.token { background: #ffe4e6; color: #be123c; font-weight: bold; }
+  .pill.data { background: #fff; color: #4b5563; }
+  .callout { position: relative; grid-column: 3; justify-self: center; width: 200%; box-sizing: border-box; margin-top: 1.6em; padding: 0.6em 0.8em; border: 0.12em dashed #f59e0b; border-radius: 0.6em; background: #fffbeb; color: #4b5563; font-size: 0.55em; line-height: 1.4; text-align: center; }
+  .callout-arrow { position: absolute; left: 0; right: 0; top: -1.3em; color: #f59e0b; font-size: 2em; line-height: 1; }
+  .sflow.web { grid-template-columns: 1fr auto 0.85fr auto 1fr; grid-template-rows: auto auto; row-gap: 0.8em; }
+  .sflow.web .side { grid-row: 1 / 3; grid-column: 1; }
+  .sflow.web .side:last-child { grid-column: 5; }
+  .sflow.web .host-row { grid-row: 1; }
+  .sflow.web .guest-row { grid-row: 2; }
+  .sflow.web .zone.host-row, .sflow.web .zone.guest-row { grid-column: 3; }
+  .sflow.web .tunnel.host-row { grid-column: 2; }
+  .sflow.web .tunnel.guest-row { grid-column: 4; }
+  .tunnel.left { padding: 0 0.6em 0 1.6em; }
+  .pipe.left::after { right: auto; left: -1.1em; border-left: none; border-right: 1em solid #10b981; }
+  .sec-cards { flex: none; grid-template-columns: repeat(3, 1fr); margin-top: 1.2em; }
+  .sec-cards .rule { font-size: 0.5em; }
+  .sec-cards .rule b { display: flex; align-items: center; gap: 0.4em; }
+  .sec-cards .rule .icon { margin: 0; width: 1.3em; height: 1.3em; stroke: var(--c); }
+  /* Title car */
+  section.title { position: relative; overflow: hidden; }
+  .road { position: absolute; left: 0; right: 0; bottom: 12%; height: 0.25em; background: repeating-linear-gradient(90deg, #cbd2d9 0 2em, transparent 2em 3.5em); }
+  .car { position: absolute; bottom: calc(12% + 0.3em); left: 0; width: 5em; animation: drive 6s linear infinite; }
+  @keyframes drive { from { transform: translateX(-6em); } to { transform: translateX(100vw); } }
 </style>
 </head>
 <body>
@@ -123,6 +167,8 @@
   <h2>Architecture Design and Security Modeling</h2>
   <p>The International Capstoners</p>
   <p>Guilherme, Zachary, Monica</p>
+  <div class="road"></div>
+  <svg class="car" viewBox="0 0 100 45"><g transform="matrix(-1 0 0 1 100 0)"><path d="M8 32 V24 Q8 20 14 19 L30 17 L42 7 Q45 5 50 5 H68 Q73 5 77 9 L86 18 Q94 19 95 24 V32 Z" fill="#3b82f6"/><path d="M45 9 H58 V18 H35 Z M62 9 H69 Q72 9 74 11 L80 18 H62 Z" fill="#dbeafe"/><circle cx="26" cy="33" r="8" fill="#1f2933"/><circle cx="26" cy="33" r="3.5" fill="#9aa5b1"/><circle cx="76" cy="33" r="8" fill="#1f2933"/><circle cx="76" cy="33" r="3.5" fill="#9aa5b1"/><rect x="90" y="22" width="5" height="3" rx="1" fill="#fde68a"/></g></svg>
 </section>
 <section class="diagram-slide">
   <h2>Components + Stack</h2>
@@ -225,17 +271,81 @@
 </section>
 
 <section class="diagram-slide">
-  <h2>Security Basics</h2>
-  <div class="sec">
-    <div class="diagram" style="grid-template-columns: repeat(3, auto)">
-      <div class="box" style="--c:#f59e0b"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M8 8a5.6 5.6 0 0 0 0 8M16 8a5.6 5.6 0 0 1 0 8M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14"/></svg><b>Sensor</b><span class="tag ok">secure boot</span></div><div class="arrow wide"><small>🔒 TLS<br>+ sensor token</small><span>⟶</span></div><div class="box" style="--c:#3b82f6"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01"/></svg><b>Server</b><span class="tag ok">checks token</span></div>
+  <h2>Sensor Security</h2>
+  <div class="sflow">
+    <div class="zone" style="--c:#6b7280">
+      <div class="zone-head"><svg class="icon" viewBox="0 0 24 24" style="stroke:#6b7280"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6.5 6.5 0 0 1 3.5 6"/></svg><b>Our team</b><small>build</small></div>
+      <div class="item" style="--k:#8b5cf6"><svg class="icon" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3 20 3M16.5 6.5l3 3M14 9l2 2"/></svg><div><b>Private key</b><small>signs firmware, stays with us</small></div></div>
+      <div class="item" style="--k:#8b5cf6"><svg class="icon" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M9 15l2 2 4-4"/></svg><div><b>Signed firmware</b><small>any change breaks the signature</small></div></div>
+      <div class="item" style="--k:#e11d48"><svg class="icon" viewBox="0 0 24 24"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg><div><b>Token</b><small>random, one per sensor</small></div></div>
     </div>
-    <div class="rules">
-      <div class="rule" style="--c:#f59e0b"><b>1 · Digital signature</b><p>We sign each firmware build with our private key, kept off the sensor. Any change to the code breaks the signature.</p></div>
-      <div class="rule" style="--c:#f59e0b"><b>2 · Public key</b><p>Burned into the Pico 2 W once, can't be changed. It can check signatures but can't make them.</p></div>
-      <div class="rule" style="--c:#f59e0b"><b>3 · Secure boot</b><p>On every power-up the chip checks the firmware's signature with the public key. Bad signature: it won't run.</p></div>
-      <div class="rule" style="--c:#3b82f6"><b>4 · TLS + token</b><p>Encrypts sensor to server traffic. Each sensor sends its own secret token, so fake sensors are refused.</p></div>
+
+    <div class="link" style="--k:#8b5cf6">flash once<div class="line"></div>+ burn public key<br>+ token into<br>one-time memory</div>
+
+    <div class="zone" style="--c:#f59e0b">
+      <div class="zone-head"><svg class="icon" viewBox="0 0 24 24" style="stroke:#f59e0b"><circle cx="12" cy="12" r="2"/><path d="M8 8a5.6 5.6 0 0 0 0 8M16 8a5.6 5.6 0 0 1 0 8M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14"/></svg><b>Sensor</b><small>Pico 2 W</small></div>
+      <div class="item" style="--k:#8b5cf6"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><div><b>Public key</b><small>burned in, can check, can't sign</small></div></div>
+      <div class="item" style="--k:#8b5cf6"><svg class="icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg><div><b>Secure boot</b><small>runs only our signed code</small></div></div>
+      <div class="item" style="--k:#e11d48"><svg class="icon" viewBox="0 0 24 24"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg><div><b>Token</b><small>locked in one-time memory</small></div></div>
     </div>
+
+    <div class="tunnel">🔒 TLS: encrypted<div class="pipe"><span class="pill token">{ id, token }</span><span class="pill data">events</span></div>nobody can read or change it</div>
+
+    <div class="zone" style="--c:#3b82f6">
+      <div class="zone-head"><svg class="icon" viewBox="0 0 24 24" style="stroke:#3b82f6"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01"/></svg><b>Server</b><small>Node.js</small></div>
+      <div class="item" style="--k:#e11d48"><svg class="icon" viewBox="0 0 24 24"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg><div><b>Checks token</b><small>against its stored hash</small></div></div>
+      <div class="results"><span class="tag ok">✓ real: poll it</span><span class="tag bad">✗ fake: close</span></div>
+    </div>
+
+    <div class="callout"><span class="callout-arrow">↑</span>If a malicious person changes code to expose the secret token, the sensor is invalidated forever. The person may use the token elsewhere, but the IP discrepancy will show that it isn't our token. Some details need to be fleshed out.</div>
+  </div>
+
+  <div class="rules sec-cards">
+    <div class="rule" style="--c:#8b5cf6"><b><svg class="icon" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3 20 3M16.5 6.5l3 3M14 9l2 2"/></svg>Private key: locks the code</b><p>Only firmware we signed runs on a sensor. Someone holding a sensor can't load their own code.</p></div>
+    <div class="rule" style="--c:#e11d48"><b><svg class="icon" viewBox="0 0 24 24"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>Token: proves it's real</b><p>Each sensor sends its own secret on connect. No valid token, no connection.</p></div>
+    <div class="rule" style="--c:#10b981"><b><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>TLS: encrypts traffic</b><p>Token and events travel encrypted, so nobody on the network can read, steal, or change them.</p></div>
+  </div>
+</section>
+
+<section class="diagram-slide">
+  <h2>Web App Security</h2>
+  <div class="sflow web">
+    <div class="zone side" style="--c:#3b82f6">
+      <div class="zone-head"><svg class="icon" viewBox="0 0 24 24" style="stroke:#3b82f6"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01"/></svg><b>Server</b><small>Host requests</small></div>
+      <div class="item" style="--k:#0ea5e9"><svg class="icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg><div><b>Checks session</b><small>which Host is this?</small></div></div>
+      <div class="item" style="--k:#e11d48"><svg class="icon" viewBox="0 0 24 24"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg><div><b>Filters by account</b><small>own sensors and pools only</small></div></div>
+      <div class="item" style="--k:#6b7280"><svg class="icon" viewBox="0 0 24 24"><path d="M12 14l4-4M3.3 19a10 10 0 1 1 17.4 0z"/></svg><div><b>Rate limits</b><small>stops floods</small></div></div>
+      <div class="results"><span class="tag ok">✓ own data</span><span class="tag bad">✗ other account</span></div>
+    </div>
+
+    <div class="tunnel left host-row">🔒 HTTPS<div class="pipe left"><span class="pill data">requests</span><span class="pill token">session</span></div>full control of own account</div>
+
+    <div class="zone host-row" style="--c:#10b981">
+      <div class="zone-head"><svg class="icon" viewBox="0 0 24 24" style="stroke:#10b981"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><b>Host</b><small>browser</small></div>
+      <div class="item" style="--k:#0ea5e9"><svg class="icon" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg><div><b>Sign in with Google</b><small>no passwords stored</small></div></div>
+    </div>
+
+    <div class="zone guest-row" style="--c:#10b981">
+      <div class="zone-head"><svg class="icon" viewBox="0 0 24 24" style="stroke:#10b981"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><b>Guest</b><small>browser</small></div>
+      <div class="item" style="--k:#f59e0b"><svg class="icon" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><div><b>No login</b><small>opens the establishment</small></div></div>
+    </div>
+
+    <div class="tunnel guest-row">🔒 HTTPS<div class="pipe"><span class="pill data">read requests</span></div>view only</div>
+
+    <div class="zone side" style="--c:#3b82f6">
+      <div class="zone-head"><svg class="icon" viewBox="0 0 24 24" style="stroke:#3b82f6"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01"/></svg><b>Server</b><small>Guest requests</small></div>
+      <div class="item" style="--k:#f59e0b"><svg class="icon" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg><div><b>Checks sharing</b><small>shared items only</small></div></div>
+      <div class="item" style="--k:#f59e0b"><svg class="icon" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><div><b>Read-only</b><small>no changes allowed</small></div></div>
+      <div class="item" style="--k:#6b7280"><svg class="icon" viewBox="0 0 24 24"><path d="M12 14l4-4M3.3 19a10 10 0 1 1 17.4 0z"/></svg><div><b>Rate limits</b><small>stops floods</small></div></div>
+      <div class="results"><span class="tag ok">✓ shared</span><span class="tag bad">✗ not shared</span></div>
+    </div>
+  </div>
+
+  <div class="rules sec-cards" style="grid-template-columns: repeat(4, 1fr)">
+    <div class="rule" style="--c:#3b82f6"><b><svg class="icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Server decides</b><p>The browser is never trusted. Every request is checked on the server.</p></div>
+    <div class="rule" style="--c:#e11d48"><b><svg class="icon" viewBox="0 0 24 24"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg>Own data only</b><p>Every Host query is filtered by account. No Host reaches another's data.</p></div>
+    <div class="rule" style="--c:#f59e0b"><b><svg class="icon" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>Shared only</b><p>Guests reach only a few public, read-only endpoints that return shared items. Everything else needs a Host session.</p></div>
+    <div class="rule" style="--c:#8b5cf6"><b><svg class="icon" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>Database not public</b><p>Only the server reaches it. Secrets in env variables. Tokens and claim codes stored as hashes.</p></div>
   </div>
 </section>
 
